@@ -18,11 +18,13 @@ func Update(c echo.Context) error {
 	queryString := `SELECT * FROM expenses WHERE id=$1`
 	row := db.QueryRow(queryString, id)
 	err := row.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.Note, pq.Array(&expense.Tags))
+
 	if err == sql.ErrNoRows {
 		return c.JSON(http.StatusNotFound, "item not found")
 	}
 
 	err = c.Bind(&expense)
+	expense.Id = id
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
@@ -32,7 +34,7 @@ func Update(c echo.Context) error {
 	}
 
 	queryString = `UPDATE expenses SET title=$1, amount=$2, note=$3, tags=$4 where id=$5`
-	_, err = db.Exec(queryString, expense.Title, expense.Amount, expense.Note, pq.Array(expense.Tags), expense.Id)
+	_, err = db.Exec(queryString, expense.Title, expense.Amount, expense.Note, pq.Array(expense.Tags), id)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
