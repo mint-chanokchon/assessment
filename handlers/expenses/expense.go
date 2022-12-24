@@ -23,3 +23,7 @@ func open() *sql.DB {
 
 	return db
 }
+
+func (e *Expense) isEmpty() bool {
+	return len(e.Title) == 0 || len(e.Note) == 0
+}

@@ -32,10 +32,12 @@ type Case struct {
 
 func TestCreate(t *testing.T) {
 	testCases := []Case{
-		{
-			Name: "should return StatusCreated",
+		{Name: "should return StatusCreated",
 			Body: `{ "title": "buy a new phone", "amount": 39000, "note": "buy a new phone", "tags": ["gadget", "shopping"] }`,
 			Want: http.StatusCreated},
+		{Name: "should return BadRequest",
+			Body: `{  }`,
+			Want: http.StatusBadRequest},
 	}
 
 	for _, testCase := range testCases {

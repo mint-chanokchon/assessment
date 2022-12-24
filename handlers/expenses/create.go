@@ -16,6 +16,10 @@ func Create(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, err)
 	}
 
+	if expense.isEmpty() {
+		return c.JSON(http.StatusBadRequest, "incomplete information")
+	}
+
 	queryString := `INSERT INTO expenses (title, amount, note, tags) VALUES ($1, $2, $3, $4) RETURNING id`
 	row := db.QueryRow(queryString, expense.Title, expense.Amount, expense.Note, pq.Array(expense.Tags))
 
