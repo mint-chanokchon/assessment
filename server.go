@@ -23,6 +23,7 @@ func main() {
 	e.POST("/expenses", expenses.Create)
 	e.GET("/expenses/:id", expenses.FindById)
 	e.PUT("/expenses/:id", expenses.Update)
+	e.GET("/expenses", expenses.FindAll)
 
 	e.Logger.Fatal(e.Start(os.Getenv("PORT")))
 }
