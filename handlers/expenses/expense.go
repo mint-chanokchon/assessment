@@ -14,12 +14,12 @@ type Expense struct {
 	Tags   []string `json:"tags"`
 }
 
-func open() {
+func open() *sql.DB {
 	url := os.Getenv("DATABASE_URL")
 	db, err := sql.Open("postgres", url)
 	if err != nil {
 		log.Fatal("Connection Failure")
 	}
 
-	defer db.Close()
+	return db
 }
