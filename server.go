@@ -21,6 +21,7 @@ func main() {
 	e.Use(initExpensesTable)
 
 	e.POST("/expenses", expenses.Create)
+	e.GET("/expenses/:id", expenses.FindById)
 
 	e.Logger.Fatal(e.Start(os.Getenv("PORT")))
 }
