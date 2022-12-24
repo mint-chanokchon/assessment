@@ -5,8 +5,11 @@ import (
 	"log"
 	"os"
 
+	"github.com/mint-chanokchon/assessment/handlers/expenses"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -17,6 +20,8 @@ func main() {
 
 	e.Use(initExpensesTable)
 
+	e.POST("/expenses", expenses.Create)
+
 	e.Logger.Fatal(e.Start(os.Getenv("PORT")))
 }
 
@@ -25,6 +30,7 @@ func initExpensesTable(next echo.HandlerFunc) echo.HandlerFunc {
 		db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 		if err != nil {
 			c.Error(err)
+			log.Fatal(err)
 			return err
 		}
 
@@ -33,6 +39,7 @@ func initExpensesTable(next echo.HandlerFunc) echo.HandlerFunc {
 		_, err = db.Exec(`CREATE TABLE IF NOT EXISTS expenses ( id SERIAL PRIMARY KEY, title TEXT, amount FLOAT, note TEXT, tags TEXT[] );`)
 		if err != nil {
 			c.Error(err)
+			log.Fatal(err)
 			return err
 		}
 
