@@ -9,6 +9,7 @@ import (
 
 func Create(c echo.Context) error {
 	db := open()
+	defer db.Close()
 
 	var expense Expense
 	err := c.Bind(&expense)
@@ -27,8 +28,6 @@ func Create(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
-
-	defer db.Close()
 
 	return c.JSON(http.StatusCreated, expense)
 }
