@@ -1,6 +1,7 @@
 package expenses
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -18,6 +19,10 @@ func FindById(c echo.Context) error {
 	var expense Expense
 
 	err := row.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.Note, pq.Array(expense.Tags))
+	if err == sql.ErrNoRows {
+		return c.JSON(http.StatusNotFound, "item not found")
+	}
+
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}

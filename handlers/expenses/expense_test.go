@@ -14,10 +14,15 @@ type Expense struct {
 	Tags   []string `json:"tags"`
 }
 
-type Case struct {
+type StatusCodeCase struct {
 	Name string
 	Body string
 	Want int
+}
+
+type Response struct {
+	*http.Response
+	err error
 }
 
 func (r *Response) Decode(v interface{}) error {

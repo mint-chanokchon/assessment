@@ -9,13 +9,8 @@ import (
 
 var url = "http://localhost" + os.Getenv("PORT")
 
-type Response struct {
-	*http.Response
-	err error
-}
-
 func TestCreate(t *testing.T) {
-	testCases := []Case{
+	statusCodeCases := []StatusCodeCase{
 		{Name: "should return StatusCreated",
 			Body: `{ "title": "buy a new phone", "amount": 39000, "note": "buy a new phone", "tags": ["gadget", "shopping"] }`,
 			Want: http.StatusCreated},
@@ -24,7 +19,7 @@ func TestCreate(t *testing.T) {
 			Want: http.StatusBadRequest},
 	}
 
-	for _, testCase := range testCases {
+	for _, testCase := range statusCodeCases {
 		t.Run(testCase.Name, func(t *testing.T) {
 			body := bytes.NewBufferString(testCase.Body)
 
