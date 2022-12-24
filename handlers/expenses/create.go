@@ -7,5 +7,7 @@ import (
 )
 
 func Create(c echo.Context) error {
+	open()
+
 	return c.JSON(http.StatusCreated, nil)
 }
