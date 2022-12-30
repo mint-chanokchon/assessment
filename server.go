@@ -20,6 +20,12 @@ func main() {
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
+	e.Use(middleware.BasicAuth(func(username, password string, ctx echo.Context) (bool, error) {
+		if username == "posttest" && password == "12345" {
+			return true, nil
+		}
+		return false, nil
+	}))
 
 	e.Use(initExpensesTable)
 
