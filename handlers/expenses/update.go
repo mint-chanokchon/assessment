@@ -3,6 +3,7 @@ package expenses
 import (
 	"database/sql"
 	"net/http"
+	"strconv"
 
 	"github.com/labstack/echo/v4"
 	"github.com/lib/pq"
@@ -16,7 +17,8 @@ func Update(c echo.Context) error {
 	var expense Expense
 
 	queryString := `SELECT * FROM expenses WHERE id=$1`
-	row := db.QueryRow(queryString, id)
+	expenseId, _ := strconv.Atoi(id)
+	row := db.QueryRow(queryString, expenseId)
 	err := row.Scan(&expense.Id, &expense.Title, &expense.Amount, &expense.Note, pq.Array(&expense.Tags))
 
 	if err == sql.ErrNoRows {
@@ -24,7 +26,8 @@ func Update(c echo.Context) error {
 	}
 
 	err = c.Bind(&expense)
-	expense.Id = id
+	expense.Id = expenseId
+
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
